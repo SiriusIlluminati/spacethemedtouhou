@@ -58,8 +58,8 @@ public class SpaceShooter extends ApplicationAdapter {
 		ship.y = 50;
 		ship.height = 79;
 		ship.width = 82;
-		rockets = new Array<Rectangle>();
-		rayProjectiles = new Array<Rectangle>();
+		rockets = new Array<>();
+		rayProjectiles = new Array<>();
 		mothershipEntity = new Rectangle();
 		mothershipEntity.x = -200;
 		mothershipEntity.y = 300;
@@ -143,7 +143,7 @@ public class SpaceShooter extends ApplicationAdapter {
 		}
 		for (Iterator<Rectangle> iter = rayProjectiles.iterator(); iter.hasNext(); ) {
 			Rectangle ray = iter.next();
-			ray.y -= 1000 * Gdx.graphics.getDeltaTime();
+			ray.y -= 2800 * Gdx.graphics.getDeltaTime();
 			if(ray.y < -100) iter.remove();
 		}
 		if (mothershipEntity.x >= 0) {
