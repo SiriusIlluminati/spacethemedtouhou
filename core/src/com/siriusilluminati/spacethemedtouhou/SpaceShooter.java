@@ -17,6 +17,7 @@ import java.util.Objects;
 
 public class SpaceShooter extends ApplicationAdapter {
 	private String directionMS;
+	int msSpeed;
 	int scrollSpeed;
 	int scrollDist;
 	int scrollDist2;
@@ -39,6 +40,7 @@ public class SpaceShooter extends ApplicationAdapter {
 	
 	@Override
 	public void create () {
+		msSpeed = 50;
 		scrollSpeed = 2;
 		scrollDist = 0;
 		scrollDist2 = 1920;
@@ -57,6 +59,7 @@ public class SpaceShooter extends ApplicationAdapter {
 		ship.height = 79;
 		ship.width = 82;
 		rockets = new Array<Rectangle>();
+		rayProjectiles = new Array<Rectangle>();
 		mothershipEntity = new Rectangle();
 		mothershipEntity.x = -200;
 		mothershipEntity.y = 300;
@@ -78,7 +81,7 @@ public class SpaceShooter extends ApplicationAdapter {
 	}
 	public void spawnRay(){
 		Rectangle ray = new Rectangle();
-		ray.x = mothershipEntity.x - 100;
+		ray.x = mothershipEntity.x + 50;
 		ray.y = mothershipEntity.y + 50;
 		ray.height = 50;
 		ray.width = 50;
@@ -138,15 +141,26 @@ public class SpaceShooter extends ApplicationAdapter {
 			rocket.y += 600 * Gdx.graphics.getDeltaTime();
 			if(rocket.y > 600) iter.remove();
 		}
-        if (mothershipEntity.x >= 0) {
+		for (Iterator<Rectangle> iter = rayProjectiles.iterator(); iter.hasNext(); ) {
+			Rectangle ray = iter.next();
+			ray.y -= 1000 * Gdx.graphics.getDeltaTime();
+			if(ray.y < -100) iter.remove();
+		}
+		if (mothershipEntity.x >= 0) {
             if (Objects.equals(directionMS, "right") & (mothershipEntity. x <= 640 - mothershipEntity.width))
-                mothershipEntity.x += 50 * Gdx.graphics.getDeltaTime();
+                mothershipEntity.x += msSpeed * Gdx.graphics.getDeltaTime();
             if (Objects.equals(directionMS, "left") & mothershipEntity.x >= 1)
-                mothershipEntity.x -= 50 * Gdx.graphics.getDeltaTime();
+                mothershipEntity.x -= msSpeed * Gdx.graphics.getDeltaTime();
             if (ship.x < 166)
                 directionMS = "left";
 			else if (ship.x > 445)
 				directionMS = "right";
+			if (Gdx.input.isKeyPressed(Input.Keys.M)) {
+				msSpeed = 0;
+				spawnRay();
+			}else{
+				msSpeed = 50;
+			}
 		}
 
 		if (shotDelay > 0)
@@ -169,5 +183,6 @@ public class SpaceShooter extends ApplicationAdapter {
 		rocketImg.dispose();
 		shipImg.dispose();
 		mothershipImg.dispose();
+		rayImg.dispose();
 	}
 }
