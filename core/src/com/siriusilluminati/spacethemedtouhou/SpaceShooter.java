@@ -17,6 +17,7 @@ import java.util.Objects;
 
 public class SpaceShooter extends ApplicationAdapter {
 	private String directionMS;
+	int invFrames;
 	int msSpeed;
 	int scrollSpeed;
 	int scrollDist;
@@ -40,6 +41,7 @@ public class SpaceShooter extends ApplicationAdapter {
 	
 	@Override
 	public void create () {
+		invFrames = 0;
 		msSpeed = 50;
 		scrollSpeed = 2;
 		scrollDist = 0;
@@ -89,7 +91,9 @@ public class SpaceShooter extends ApplicationAdapter {
 	}
 
 
-	@Override
+	@SuppressWarnings("SuspiciousIndentation")
+	// Hell yeah
+    @Override
 	public void render () {
 		ScreenUtils.clear(1, 0, 0, 1);
 		screen.update();
@@ -139,7 +143,12 @@ public class SpaceShooter extends ApplicationAdapter {
 		for (Iterator<Rectangle> iter = rockets.iterator(); iter.hasNext(); ) {
 			Rectangle rocket = iter.next();
 			rocket.y += 600 * Gdx.graphics.getDeltaTime();
-			if(rocket.y > 600) iter.remove();
+			if (rocket.overlaps(mothershipEntity)) {
+				score += 1;
+				iter.remove();
+			}
+			if(rocket.y > 600)
+				iter.remove();
 		}
 		for (Iterator<Rectangle> iter = rayProjectiles.iterator(); iter.hasNext(); ) {
 			Rectangle ray = iter.next();
