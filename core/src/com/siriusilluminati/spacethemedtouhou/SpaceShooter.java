@@ -6,6 +6,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
@@ -25,12 +26,18 @@ public class SpaceShooter extends ApplicationAdapter {
 	int focusMovementReduction;
 	int shotDelay;
 	int score;
+	boolean hitboxMode;
 	SpriteBatch batch;
 	Texture bgImg1;
 	Texture bgImg2;
 	Texture mothershipImg;
 	Texture shipImg;
+	Sprite shipSprite;
 	Texture rayImg;
+	Texture hbShip;
+	Texture hbMS;
+	Texture hbRay;
+	Texture hbRocketFriendly;
 	BitmapFont font;
 	Texture rocketImg;
 	Rectangle ship;
@@ -46,6 +53,7 @@ public class SpaceShooter extends ApplicationAdapter {
 		scrollSpeed = 2;
 		scrollDist = 0;
 		scrollDist2 = 1920;
+		hitboxMode = false;
 		screen = new OrthographicCamera();
 		screen.setToOrtho(false, 640, 640);
 		batch = new SpriteBatch();
@@ -53,8 +61,13 @@ public class SpaceShooter extends ApplicationAdapter {
 		bgImg2 = bgImg1;
 		rocketImg = new Texture("rocket.png");
 		shipImg = new Texture("ship.png");
+		shipSprite = new Sprite(shipImg);
 		mothershipImg = new Texture("mothership.png");
 		rayImg = new Texture("ray.png");
+		hbMS = new Texture("hbMS.png");
+		hbRay = new Texture("hbRay.png");
+		hbShip = new Texture("hbShip.png");
+		hbRocketFriendly = new Texture("hbRocketFriendly.png");
 		ship = new Rectangle();
 		ship.x = 240;
 		ship.y = 50;
@@ -107,8 +120,24 @@ public class SpaceShooter extends ApplicationAdapter {
 		for (Rectangle ray : rayProjectiles) {
 			batch.draw(rayImg, ray.x, ray.y);
 		}
+		if (invFrames != 0) {
+			shipSprite.setAlpha(0.5f);
+			System.out.println(invFrames);
+		}else{
+			shipSprite.setAlpha(1);
+		}
 		batch.draw(mothershipImg, mothershipEntity.x, mothershipEntity.y);
-		batch.draw(shipImg, ship.x, ship.y);
+		batch.draw(shipSprite, ship.x, ship.y);
+		if (hitboxMode) {
+			batch.draw(hbShip, ship.x, ship.y);
+			batch.draw(hbMS, mothershipEntity.x, mothershipEntity.y);
+			for (Rectangle ray : rayProjectiles) {
+				batch.draw(hbRay, ray.x, ray.y);
+			}
+			for (Rectangle rocket : rockets) {
+				batch.draw(hbRocketFriendly, rocket.x, rocket.y);
+			}
+		}
 		font.draw(batch, "Current score: " + score, 20, 20);
 		batch.end();
 
@@ -135,8 +164,10 @@ public class SpaceShooter extends ApplicationAdapter {
 		// focus
 		if (Gdx.input.isKeyJustPressed(Input.Keys.SHIFT_LEFT)) {
 			focusMovementReduction = 2;
+			hitboxMode = true;
 		}else if (!Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)) {
 			focusMovementReduction = 1;
+			hitboxMode = false;
 		}
 
 
@@ -153,6 +184,9 @@ public class SpaceShooter extends ApplicationAdapter {
 		for (Iterator<Rectangle> iter = rayProjectiles.iterator(); iter.hasNext(); ) {
 			Rectangle ray = iter.next();
 			ray.y -= 2800 * Gdx.graphics.getDeltaTime();
+			if (ray.overlaps(ship) & invFrames == 0) {
+				invFrames = 70;
+			}
 			if(ray.y < -100) iter.remove();
 		}
 		if (mothershipEntity.x >= 0) {
@@ -174,6 +208,8 @@ public class SpaceShooter extends ApplicationAdapter {
 
 		if (shotDelay > 0)
 			shotDelay -= 1;
+		if (invFrames != 0)
+			invFrames -= 1;
 
 		if (scrollDist == -1920)
 			scrollDist = 1920;
