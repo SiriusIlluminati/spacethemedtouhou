@@ -221,12 +221,20 @@ public class SpaceShooter extends ApplicationAdapter {
 			scrollDist = 1920;
 		if (scrollDist2 == -1920)
 			scrollDist2 = 1920;
+
+		// devtools
+		if (Gdx.input.isKeyPressed(Input.Keys.F7)) {
+			invFrames = 2147403562;
+		}
 		if (Gdx.input.isKeyPressed(Input.Keys.F8)){
 			System.out.println("Player X: " + ship.x);
 			System.out.println("Player Y: " + ship.y);
 			System.out.println("MS X: " + mothershipEntity.x);
 			System.out.println("MS Y: " + mothershipEntity.y);
 			System.out.println("MS direction: " + directionMS);
+		}
+		if (Gdx.input.isKeyPressed(Input.Keys.F24)){
+			System.out.println("Obama mode activated");
 		}
 		scrollDist -= scrollSpeed;
 		scrollDist2 -= scrollSpeed;
