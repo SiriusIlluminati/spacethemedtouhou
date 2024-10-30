@@ -71,15 +71,15 @@ public class SpaceShooter extends ApplicationAdapter {
 		ship = new Rectangle();
 		ship.x = 240;
 		ship.y = 50;
-		ship.height = 79;
-		ship.width = 82;
+		ship.height = 72;
+		ship.width = 54;
 		rockets = new Array<>();
 		rayProjectiles = new Array<>();
 		mothershipEntity = new Rectangle();
 		mothershipEntity.x = -200;
 		mothershipEntity.y = 300;
-		mothershipEntity.height = 150;
-		mothershipEntity.width = 150;
+		mothershipEntity.height = 117;
+		mothershipEntity.width = 126;
 		directionMS = "left";
 		shotDelay = 0;
 		score = 0;
@@ -88,18 +88,18 @@ public class SpaceShooter extends ApplicationAdapter {
 
 	public void spawnRocket() {
 		Rectangle rocket = new Rectangle();
-		rocket.x = ship.x + 32;
-		rocket.y = ship.y + 20;
+		rocket.x = ship.x + 18;
+		rocket.y = ship.y + 13;
 		rocket.width = 18;
 		rocket.height = 45;
 		rockets.add(rocket);
 	}
 	public void spawnRay(){
 		Rectangle ray = new Rectangle();
-		ray.x = mothershipEntity.x + 50;
+		ray.x = mothershipEntity.x + 47;
 		ray.y = mothershipEntity.y + 50;
 		ray.height = 50;
-		ray.width = 50;
+		ray.width = 32;
 		rayProjectiles.add(ray);
 	}
 
@@ -189,15 +189,21 @@ public class SpaceShooter extends ApplicationAdapter {
 			}
 			if(ray.y < -100) iter.remove();
 		}
+
+
 		if (mothershipEntity.x >= 0) {
+			// movement
             if (Objects.equals(directionMS, "right") & (mothershipEntity. x <= 640 - mothershipEntity.width))
                 mothershipEntity.x += msSpeed * Gdx.graphics.getDeltaTime();
             if (Objects.equals(directionMS, "left") & mothershipEntity.x >= 1)
                 mothershipEntity.x -= msSpeed * Gdx.graphics.getDeltaTime();
-            if (ship.x < 166)
+			// movement ai
+            if (ship.x <= 166 & Objects.equals(directionMS, "right"))
                 directionMS = "left";
-			else if (ship.x > 445)
+			else if (ship.x >= 445 & Objects.equals(directionMS, "left"))
 				directionMS = "right";
+			if (mothershipEntity. x == 640 - mothershipEntity.width)
+				directionMS = "left";
 			if (Gdx.input.isKeyPressed(Input.Keys.M)) {
 				msSpeed = 0;
 				spawnRay();
@@ -215,7 +221,13 @@ public class SpaceShooter extends ApplicationAdapter {
 			scrollDist = 1920;
 		if (scrollDist2 == -1920)
 			scrollDist2 = 1920;
-
+		if (Gdx.input.isKeyPressed(Input.Keys.F8)){
+			System.out.println("Player X: " + ship.x);
+			System.out.println("Player Y: " + ship.y);
+			System.out.println("MS X: " + mothershipEntity.x);
+			System.out.println("MS Y: " + mothershipEntity.y);
+			System.out.println("MS direction: " + directionMS);
+		}
 		scrollDist -= scrollSpeed;
 		scrollDist2 -= scrollSpeed;
 	}
