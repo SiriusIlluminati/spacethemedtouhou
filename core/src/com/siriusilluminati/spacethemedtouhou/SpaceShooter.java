@@ -26,6 +26,12 @@ public class SpaceShooter extends ApplicationAdapter {
 	int focusMovementReduction;
 	int shotDelay;
 	int score;
+	int bossHP;
+	int maxBossHP;
+	float hpBarPercent;
+	Sprite hpBarGreen;
+	Sprite hpBarRed;
+	String activeBoss;
 	boolean hitboxMode;
 	SpriteBatch batch;
 	Texture bgImg1;
@@ -48,11 +54,12 @@ public class SpaceShooter extends ApplicationAdapter {
 	Array<Rectangle> rockets;
 	Array<Rectangle> rayProjectiles;
 	OrthographicCamera screen;
+
 	boolean obamaMode;
 	Texture obamaShip;
 	Texture eagleRay;
 	Texture trumpMS;
-	
+
 	@Override
 	public void create () {
 		invFrames = 0;
@@ -79,7 +86,7 @@ public class SpaceShooter extends ApplicationAdapter {
 		hbShip = new Texture("hbShip.png");
 		hbRocketFriendly = new Texture("hbRocketFriendly.png");
 		ship = new Rectangle();
-		ship.x = 240;
+		ship.x = 290;
 		ship.y = 50;
 		ship.height = 72;
 		ship.width = 54;
@@ -92,6 +99,9 @@ public class SpaceShooter extends ApplicationAdapter {
 		mothershipEntity.width = 126;
 		directionMS = "left";
 		shotDelay = 0;
+
+		hpBarGreen = new Sprite(new Texture("hpFull.png"));
+		hpBarRed = new Sprite(new Texture("hpEmpty.png"));
 		score = 0;
 		font = new BitmapFont();
 		obamaMode = false;
@@ -137,7 +147,7 @@ public class SpaceShooter extends ApplicationAdapter {
 			}
 			batch.draw(trumpMS, mothershipEntity.x, mothershipEntity.y);
 			batch.draw(obamaShip, ship.x, ship.y);
-		}else{
+		} else {
 			batch.draw(bgImg1, 0, scrollDist);
 			batch.draw(bgImg2, 0, scrollDist2);
 			for (Rectangle rocket : rockets) {
@@ -148,7 +158,7 @@ public class SpaceShooter extends ApplicationAdapter {
 			}
 			if (invFrames != 0) {
 				batch.draw(shipDamaged, ship.x, ship.y);
-			}else{
+			} else {
 				batch.draw(shipSprite, ship.x, ship.y);
 			}
 			batch.draw(mothershipImg, mothershipEntity.x, mothershipEntity.y);
@@ -165,7 +175,13 @@ public class SpaceShooter extends ApplicationAdapter {
 			}
 		}
 		font.draw(batch, "Current score: " + score, 20, 20);
+		if (activeBoss != null) {
+			batch.draw(hpBarRed, 225, 450);
+			hpBarGreen.setSize((200 * hpBarPercent), 20);
+			batch.draw(hpBarGreen, 225, 450, (200 * hpBarPercent), 20);
+		}
 		batch.end();
+
 
 		// move
 		if (Gdx.input.isKeyPressed(Input.Keys.A) & ship.x > 0)
@@ -178,6 +194,8 @@ public class SpaceShooter extends ApplicationAdapter {
 			ship.y += 200 * Gdx.graphics.getDeltaTime() / focusMovementReduction;
 		if (Gdx.input.isKeyPressed(Input.Keys.K)) {
 			mothershipEntity.x = MathUtils.random(10, 640 - 80);
+			activeBoss = "MS";
+			bossHP = 100;
 			System.out.println("Loaded mothership");
 		}
 
@@ -200,6 +218,7 @@ public class SpaceShooter extends ApplicationAdapter {
 			rocket.y += 600 * Gdx.graphics.getDeltaTime();
 			if (rocket.overlaps(mothershipEntity)) {
 				score += 1;
+				bossHP -= 1;
 				iter.remove();
 			}
 			if(rocket.y > 600)
@@ -215,7 +234,8 @@ public class SpaceShooter extends ApplicationAdapter {
 		}
 
 
-		if (mothershipEntity.x >= 0) {
+		if (Objects.equals(activeBoss, "MS")) {
+			maxBossHP = 100;
 			// movement
             if (Objects.equals(directionMS, "right") & (mothershipEntity. x <= 640 - mothershipEntity.width))
                 mothershipEntity.x += msSpeed * Gdx.graphics.getDeltaTime();
@@ -254,12 +274,18 @@ public class SpaceShooter extends ApplicationAdapter {
 		if (Gdx.input.isKeyPressed(Input.Keys.F7)) {
 			invFrames = 2147403562;
 		}
-		if (Gdx.input.isKeyPressed(Input.Keys.F8)){
+		if (Gdx.input.isKeyPressed(Input.Keys.F8)) {
+			System.out.println(" ");
+			System.out.println(" ");
 			System.out.println("Player X: " + ship.x);
 			System.out.println("Player Y: " + ship.y);
-			System.out.println("MS X: " + mothershipEntity.x);
-			System.out.println("MS Y: " + mothershipEntity.y);
-			System.out.println("MS direction: " + directionMS);
+			System.out.println(" ");
+			System.out.println("Active boss: " + activeBoss);
+			if (Objects.equals(activeBoss, "MS")) {
+				System.out.println("MS X: " + mothershipEntity.x);
+				System.out.println("MS Y: " + mothershipEntity.y);
+				System.out.println("MS direction: " + directionMS);
+			}
 		}
 		if (Gdx.input.isKeyPressed(Input.Keys.F12)){
 			System.out.println("Obama mode activated");
@@ -267,8 +293,13 @@ public class SpaceShooter extends ApplicationAdapter {
 		}
 		scrollDist -= scrollSpeed;
 		scrollDist2 -= scrollSpeed;
+
+		// hp bar fiddling
+		if (activeBoss != null) {
+			hpBarPercent = (float) (bossHP / maxBossHP + (0.01 - bossHP % maxBossHP) * 0.01);
+		}
 	}
-	
+
 	@Override
 	public void dispose () {
 		batch.dispose();
