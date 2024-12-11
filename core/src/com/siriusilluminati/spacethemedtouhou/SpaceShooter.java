@@ -177,7 +177,6 @@ public class SpaceShooter extends ApplicationAdapter {
 		font.draw(batch, "Current score: " + score, 20, 20);
 		if (activeBoss != null) {
 			batch.draw(hpBarRed, 225, 450);
-			hpBarGreen.setSize((200 * hpBarPercent), 20);
 			batch.draw(hpBarGreen, 225, 450, (200 * hpBarPercent), 20);
 		}
 		batch.end();
@@ -296,7 +295,7 @@ public class SpaceShooter extends ApplicationAdapter {
 
 		// hp bar fiddling
 		if (activeBoss != null) {
-			hpBarPercent = (float) (bossHP / maxBossHP + (0.01 - bossHP % maxBossHP) * 0.01);
+			hpBarPercent = (float) (Math.ceil(((double) bossHP / maxBossHP) * 100) /100);
 		}
 	}
 
