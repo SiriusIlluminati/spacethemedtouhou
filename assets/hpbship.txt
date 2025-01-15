@@ -1,0 +1,306 @@
+hpbship.png
+size: 64, 1760
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+sprite_hpbarship00
+  rotate: false
+  xy: 0, 0
+  size: 32, 80
+  orig: 32, 80
+  offset: 0, 0
+  index: -1
+sprite_hpbarship01
+  rotate: false
+  xy: 32, 0
+  size: 32, 80
+  orig: 32, 80
+  offset: 0, 0
+  index: -1
+sprite_hpbarship02
+  rotate: false
+  xy: 0, 80
+  size: 32, 80
+  orig: 32, 80
+  offset: 0, 0
+  index: -1
+sprite_hpbarship03
+  rotate: false
+  xy: 32, 80
+  size: 32, 80
+  orig: 32, 80
+  offset: 0, 0
+  index: -1
+sprite_hpbarship04
+  rotate: false
+  xy: 0, 160
+  size: 32, 80
+  orig: 32, 80
+  offset: 0, 0
+  index: -1
+sprite_hpbarship05
+  rotate: false
+  xy: 32, 160
+  size: 32, 80
+  orig: 32, 80
+  offset: 0, 0
+  index: -1
+sprite_hpbarship06
+  rotate: false
+  xy: 0, 240
+  size: 32, 80
+  orig: 32, 80
+  offset: 0, 0
+  index: -1
+sprite_hpbarship07
+  rotate: false
+  xy: 32, 240
+  size: 32, 80
+  orig: 32, 80
+  offset: 0, 0
+  index: -1
+sprite_hpbarship08
+  rotate: false
+  xy: 0, 320
+  size: 32, 80
+  orig: 32, 80
+  offset: 0, 0
+  index: -1
+sprite_hpbarship09
+  rotate: false
+  xy: 32, 320
+  size: 32, 80
+  orig: 32, 80
+  offset: 0, 0
+  index: -1
+sprite_hpbarship10
+  rotate: false
+  xy: 0, 400
+  size: 32, 80
+  orig: 32, 80
+  offset: 0, 0
+  index: -1
+sprite_hpbarship11
+  rotate: false
+  xy: 32, 400
+  size: 32, 80
+  orig: 32, 80
+  offset: 0, 0
+  index: -1
+sprite_hpbarship12
+  rotate: false
+  xy: 0, 480
+  size: 32, 80
+  orig: 32, 80
+  offset: 0, 0
+  index: -1
+sprite_hpbarship13
+  rotate: false
+  xy: 32, 480
+  size: 32, 80
+  orig: 32, 80
+  offset: 0, 0
+  index: -1
+sprite_hpbarship14
+  rotate: false
+  xy: 0, 560
+  size: 32, 80
+  orig: 32, 80
+  offset: 0, 0
+  index: -1
+sprite_hpbarship15
+  rotate: false
+  xy: 32, 560
+  size: 32, 80
+  orig: 32, 80
+  offset: 0, 0
+  index: -1
+sprite_hpbarship16
+  rotate: false
+  xy: 0, 640
+  size: 32, 80
+  orig: 32, 80
+  offset: 0, 0
+  index: -1
+sprite_hpbarship17
+  rotate: false
+  xy: 32, 640
+  size: 32, 80
+  orig: 32, 80
+  offset: 0, 0
+  index: -1
+sprite_hpbarship18
+  rotate: false
+  xy: 0, 720
+  size: 32, 80
+  orig: 32, 80
+  offset: 0, 0
+  index: -1
+sprite_hpbarship19
+  rotate: false
+  xy: 32, 720
+  size: 32, 80
+  orig: 32, 80
+  offset: 0, 0
+  index: -1
+sprite_hpbarship20
+  rotate: false
+  xy: 0, 800
+  size: 32, 80
+  orig: 32, 80
+  offset: 0, 0
+  index: -1
+sprite_hpbarship21
+  rotate: false
+  xy: 32, 800
+  size: 32, 80
+  orig: 32, 80
+  offset: 0, 0
+  index: -1
+sprite_hpbarship22
+  rotate: false
+  xy: 0, 880
+  size: 32, 80
+  orig: 32, 80
+  offset: 0, 0
+  index: -1
+sprite_hpbarship23
+  rotate: false
+  xy: 32, 880
+  size: 32, 80
+  orig: 32, 80
+  offset: 0, 0
+  index: -1
+sprite_hpbarship24
+  rotate: false
+  xy: 0, 960
+  size: 32, 80
+  orig: 32, 80
+  offset: 0, 0
+  index: -1
+sprite_hpbarship25
+  rotate: false
+  xy: 32, 960
+  size: 32, 80
+  orig: 32, 80
+  offset: 0, 0
+  index: -1
+sprite_hpbarship26
+  rotate: false
+  xy: 0, 1040
+  size: 32, 80
+  orig: 32, 80
+  offset: 0, 0
+  index: -1
+sprite_hpbarship27
+  rotate: false
+  xy: 32, 1040
+  size: 32, 80
+  orig: 32, 80
+  offset: 0, 0
+  index: -1
+sprite_hpbarship28
+  rotate: false
+  xy: 0, 1120
+  size: 32, 80
+  orig: 32, 80
+  offset: 0, 0
+  index: -1
+sprite_hpbarship29
+  rotate: false
+  xy: 32, 1120
+  size: 32, 80
+  orig: 32, 80
+  offset: 0, 0
+  index: -1
+sprite_hpbarship30
+  rotate: false
+  xy: 0, 1200
+  size: 32, 80
+  orig: 32, 80
+  offset: 0, 0
+  index: -1
+sprite_hpbarship31
+  rotate: false
+  xy: 32, 1200
+  size: 32, 80
+  orig: 32, 80
+  offset: 0, 0
+  index: -1
+sprite_hpbarship32
+  rotate: false
+  xy: 0, 1280
+  size: 32, 80
+  orig: 32, 80
+  offset: 0, 0
+  index: -1
+sprite_hpbarship33
+  rotate: false
+  xy: 32, 1280
+  size: 32, 80
+  orig: 32, 80
+  offset: 0, 0
+  index: -1
+sprite_hpbarship34
+  rotate: false
+  xy: 0, 1360
+  size: 32, 80
+  orig: 32, 80
+  offset: 0, 0
+  index: -1
+sprite_hpbarship35
+  rotate: false
+  xy: 32, 1360
+  size: 32, 80
+  orig: 32, 80
+  offset: 0, 0
+  index: -1
+sprite_hpbarship36
+  rotate: false
+  xy: 0, 1440
+  size: 32, 80
+  orig: 32, 80
+  offset: 0, 0
+  index: -1
+sprite_hpbarship37
+  rotate: false
+  xy: 32, 1440
+  size: 32, 80
+  orig: 32, 80
+  offset: 0, 0
+  index: -1
+sprite_hpbarship38
+  rotate: false
+  xy: 0, 1520
+  size: 32, 80
+  orig: 32, 80
+  offset: 0, 0
+  index: -1
+sprite_hpbarship39
+  rotate: false
+  xy: 32, 1520
+  size: 32, 80
+  orig: 32, 80
+  offset: 0, 0
+  index: -1
+sprite_hpbarship40
+  rotate: false
+  xy: 0, 1600
+  size: 32, 80
+  orig: 32, 80
+  offset: 0, 0
+  index: -1
+sprite_hpbarship41
+  rotate: false
+  xy: 32, 1600
+  size: 32, 80
+  orig: 32, 80
+  offset: 0, 0
+  index: -1
+sprite_hpbarship42
+  rotate: false
+  xy: 0, 1680
+  size: 32, 80
+  orig: 32, 80
+  offset: 0, 0
+  index: -1
