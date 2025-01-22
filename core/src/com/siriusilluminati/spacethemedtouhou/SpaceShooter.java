@@ -12,6 +12,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 
 import java.util.Iterator;
 import java.util.Objects;
@@ -31,6 +32,7 @@ public class SpaceShooter extends ApplicationAdapter {
 	float hpBarPercent;
 	Sprite hpBarGreen;
 	Sprite hpBarRed;
+	TextureAtlas textureAtlas;
 	String activeBoss;
 	boolean hitboxMode;
 	SpriteBatch batch;
@@ -102,6 +104,7 @@ public class SpaceShooter extends ApplicationAdapter {
 
 		hpBarGreen = new Sprite(new Texture("hpFull.png"));
 		hpBarRed = new Sprite(new Texture("hpEmpty.png"));
+		textureAtlas = new TextureAtlas("hpbship.txt");
 		score = 0;
 		font = new BitmapFont();
 		obamaMode = false;
@@ -315,5 +318,6 @@ public class SpaceShooter extends ApplicationAdapter {
 		eagleRay.dispose();
 		obamaShip.dispose();
 		trumpMS.dispose();
+		textureAtlas.dispose();
 	}
 }
