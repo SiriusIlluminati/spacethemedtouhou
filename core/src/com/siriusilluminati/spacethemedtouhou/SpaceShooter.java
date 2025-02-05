@@ -16,6 +16,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 
 import java.util.Iterator;
 import java.util.Objects;
+import static com.siriusilluminati.spacethemedtouhou.shipHPIndicator.shipHbSpriteCalcer;
 
 public class SpaceShooter extends ApplicationAdapter {
 	private String directionMS;
@@ -32,7 +33,12 @@ public class SpaceShooter extends ApplicationAdapter {
 	float hpBarPercent;
 	Sprite hpBarGreen;
 	Sprite hpBarRed;
-	TextureAtlas textureAtlas;
+
+	TextureAtlas textureAtlasHBShip;
+	int hbsDrain;
+	int shipHP;
+	int hbsFill;
+
 	String activeBoss;
 	boolean hitboxMode;
 	SpriteBatch batch;
@@ -92,6 +98,7 @@ public class SpaceShooter extends ApplicationAdapter {
 		ship.y = 50;
 		ship.height = 72;
 		ship.width = 54;
+		shipHP = 6;
 		rockets = new Array<>();
 		rayProjectiles = new Array<>();
 		mothershipEntity = new Rectangle();
@@ -104,7 +111,7 @@ public class SpaceShooter extends ApplicationAdapter {
 
 		hpBarGreen = new Sprite(new Texture("hpFull.png"));
 		hpBarRed = new Sprite(new Texture("hpEmpty.png"));
-		textureAtlas = new TextureAtlas("hpbship.txt");
+		textureAtlasHBShip = new TextureAtlas("hpbship.txt");
 		score = 0;
 		font = new BitmapFont();
 		obamaMode = false;
@@ -128,6 +135,11 @@ public class SpaceShooter extends ApplicationAdapter {
 		ray.height = 50;
 		ray.width = 32;
 		rayProjectiles.add(ray);
+	}
+
+	public void shipHit(){
+		invFrames = 20;
+		shipHP -= 1;
 	}
 
 
@@ -182,97 +194,105 @@ public class SpaceShooter extends ApplicationAdapter {
 			batch.draw(hpBarRed, 225, 450);
 			batch.draw(hpBarGreen, 225, 450, (200 * hpBarPercent), 20);
 		}
+		batch.draw(shipHbSpriteCalcer(textureAtlasHBShip, shipHP, hbsDrain, hbsFill), 580, 40);
 		batch.end();
 
-
-		// move
-		if (Gdx.input.isKeyPressed(Input.Keys.A) & ship.x > 0)
-			ship.x -= 400 * Gdx.graphics.getDeltaTime() / focusMovementReduction;
-		if (Gdx.input.isKeyPressed(Input.Keys.D) & ship.x < 640 - ship.width)
-			ship.x += 400 * Gdx.graphics.getDeltaTime() / focusMovementReduction;
-		if (Gdx.input.isKeyPressed(Input.Keys.S) & ship.y > 10)
-			ship.y -= 600 * Gdx.graphics.getDeltaTime() / focusMovementReduction;
-		if (Gdx.input.isKeyPressed(Input.Keys.W) & ship.y < 300)
-			ship.y += 200 * Gdx.graphics.getDeltaTime() / focusMovementReduction;
-		if (Gdx.input.isKeyPressed(Input.Keys.K)) {
-			mothershipEntity.x = MathUtils.random(10, 640 - 80);
-			activeBoss = "MS";
-			bossHP = 100;
-			System.out.println("Loaded mothership");
-		}
-
-		// shoot
-		if (Gdx.input.isKeyPressed(Input.Keys.SPACE) & shotDelay == 0) {
-			spawnRocket();
-			shotDelay = 10 / focusMovementReduction;
-		}
-
-		// focus
-		if (Gdx.input.isKeyJustPressed(Input.Keys.SHIFT_LEFT)) {
-			focusMovementReduction = 2;
-		}else if (!Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)) {
-			focusMovementReduction = 1;
-		}
-
-
-		for (Iterator<Rectangle> iter = rockets.iterator(); iter.hasNext(); ) {
-			Rectangle rocket = iter.next();
-			rocket.y += 600 * Gdx.graphics.getDeltaTime();
-			if (rocket.overlaps(mothershipEntity)) {
-				score += 1;
-				bossHP -= 1;
-				iter.remove();
+		if (shipHP > 0) {
+			// move
+			if (Gdx.input.isKeyPressed(Input.Keys.A) & ship.x > 0)
+				ship.x -= 400 * Gdx.graphics.getDeltaTime() / focusMovementReduction;
+			if (Gdx.input.isKeyPressed(Input.Keys.D) & ship.x < 640 - ship.width)
+				ship.x += 400 * Gdx.graphics.getDeltaTime() / focusMovementReduction;
+			if (Gdx.input.isKeyPressed(Input.Keys.S) & ship.y > 10)
+				ship.y -= 600 * Gdx.graphics.getDeltaTime() / focusMovementReduction;
+			if (Gdx.input.isKeyPressed(Input.Keys.W) & ship.y < 300)
+				ship.y += 200 * Gdx.graphics.getDeltaTime() / focusMovementReduction;
+			if (Gdx.input.isKeyPressed(Input.Keys.K)) {
+				mothershipEntity.x = MathUtils.random(10, 640 - 80);
+				activeBoss = "MS";
+				bossHP = 100;
+				System.out.println("Loaded mothership");
 			}
-			if(rocket.y > 600)
-				iter.remove();
-		}
-		for (Iterator<Rectangle> iter = rayProjectiles.iterator(); iter.hasNext(); ) {
-			Rectangle ray = iter.next();
-			ray.y -= 2800 * Gdx.graphics.getDeltaTime();
-			if (ray.overlaps(ship) & invFrames == 0) {
-				invFrames = 20;
+
+			// shoot
+			if (Gdx.input.isKeyPressed(Input.Keys.SPACE) & shotDelay == 0) {
+				spawnRocket();
+				shotDelay = 10 / focusMovementReduction;
 			}
-			if(ray.y < -100) iter.remove();
-		}
 
-
-		if (Objects.equals(activeBoss, "MS")) {
-			maxBossHP = 100;
-			// movement
-            if (Objects.equals(directionMS, "right") & (mothershipEntity. x <= 640 - mothershipEntity.width))
-                mothershipEntity.x += msSpeed * Gdx.graphics.getDeltaTime();
-            if (Objects.equals(directionMS, "left") & mothershipEntity.x >= 1)
-                mothershipEntity.x -= msSpeed * Gdx.graphics.getDeltaTime();
-			// movement ai
-            if (ship.x <= 166 & Objects.equals(directionMS, "right"))
-                directionMS = "left";
-			else if (ship.x >= 445 & Objects.equals(directionMS, "left"))
-				directionMS = "right";
-			if (mothershipEntity. x == 640 - mothershipEntity.width)
-				directionMS = "left";
-			if (Gdx.input.isKeyPressed(Input.Keys.M)) {
-				msSpeed = 0;
-				spawnRay();
-			}else{
-				msSpeed = 50;
+			// focus
+			if (Gdx.input.isKeyJustPressed(Input.Keys.SHIFT_LEFT)) {
+				focusMovementReduction = 2;
+			} else if (!Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)) {
+				focusMovementReduction = 1;
 			}
+
+
+			for (Iterator<Rectangle> iter = rockets.iterator(); iter.hasNext(); ) {
+				Rectangle rocket = iter.next();
+				rocket.y += 600 * Gdx.graphics.getDeltaTime();
+				if (rocket.overlaps(mothershipEntity)) {
+					score += 1;
+					bossHP -= 1;
+					iter.remove();
+				}
+				if (rocket.y > 600)
+					iter.remove();
+			}
+			for (Iterator<Rectangle> iter = rayProjectiles.iterator(); iter.hasNext(); ) {
+				Rectangle ray = iter.next();
+				ray.y -= 2800 * Gdx.graphics.getDeltaTime();
+				if (ray.overlaps(ship) & invFrames == 0) {
+					shipHit();
+				}
+				if (ray.y < -100) iter.remove();
+			}
+
+
+			if (Objects.equals(activeBoss, "MS")) {
+				maxBossHP = 100;
+				// movement
+				if (Objects.equals(directionMS, "right") & (mothershipEntity.x <= 640 - mothershipEntity.width))
+					mothershipEntity.x += msSpeed * Gdx.graphics.getDeltaTime();
+				if (Objects.equals(directionMS, "left") & mothershipEntity.x >= 1)
+					mothershipEntity.x -= msSpeed * Gdx.graphics.getDeltaTime();
+				// movement ai
+				if (ship.x <= 166 & Objects.equals(directionMS, "right"))
+					directionMS = "left";
+				else if (ship.x >= 445 & Objects.equals(directionMS, "left"))
+					directionMS = "right";
+				if (mothershipEntity.x == 640 - mothershipEntity.width)
+					directionMS = "left";
+				if (Gdx.input.isKeyPressed(Input.Keys.M)) {
+					msSpeed = 0;
+					spawnRay();
+				} else {
+					msSpeed = 50;
+				}
+			}
+
+			if (shotDelay > 0)
+				shotDelay -= 1;
+			if (invFrames != 0)
+				invFrames -= 1;
+
+			if (scrollDist == -1920)
+				scrollDist = 1920;
+			if (scrollDist2 == -1920)
+				scrollDist2 = 1920;
+
+			scrollDist -= scrollSpeed;
+			scrollDist2 -= scrollSpeed;
 		}
-
-		if (shotDelay > 0)
-			shotDelay -= 1;
-		if (invFrames != 0)
-			invFrames -= 1;
-
-		if (scrollDist == -1920)
-			scrollDist = 1920;
-		if (scrollDist2 == -1920)
-			scrollDist2 = 1920;
 
 		// devtools
 		if (Gdx.input.isKeyPressed(Input.Keys.F2))
 			hitboxMode = true;
 		if (Gdx.input.isKeyPressed(Input.Keys.F3))
 			hitboxMode = false;
+		if (Gdx.input.isKeyPressed(Input.Keys.F4)){
+			System.out.println(Gdx.graphics.getFramesPerSecond());
+		}
 		if (Gdx.input.isKeyPressed(Input.Keys.F7)) {
 			invFrames = 2147403562;
 		}
@@ -293,8 +313,6 @@ public class SpaceShooter extends ApplicationAdapter {
 			System.out.println("Obama mode activated");
 			obamaMode = true;
 		}
-		scrollDist -= scrollSpeed;
-		scrollDist2 -= scrollSpeed;
 
 		// hp bar fiddling
 		if (activeBoss != null) {
@@ -318,6 +336,6 @@ public class SpaceShooter extends ApplicationAdapter {
 		eagleRay.dispose();
 		obamaShip.dispose();
 		trumpMS.dispose();
-		textureAtlas.dispose();
+		textureAtlasHBShip.dispose();
 	}
 }
