@@ -38,6 +38,7 @@ public class SpaceShooter extends ApplicationAdapter {
 	int hbsDrain;
 	int shipHP;
 	int hbsFill;
+	int hbsAnimCounter;
 
 	String activeBoss;
 	boolean hitboxMode;
@@ -140,6 +141,12 @@ public class SpaceShooter extends ApplicationAdapter {
 	public void shipHit(){
 		invFrames = 20;
 		shipHP -= 1;
+		hbsDrain = 1;
+	}
+	public void shipHeal(){
+		shipHP += 1;
+		hbsFill = 1;
+		hbsDrain = 0;
 	}
 
 
@@ -149,6 +156,29 @@ public class SpaceShooter extends ApplicationAdapter {
 	public void render () {
 		ScreenUtils.clear(1, 0, 0, 1);
 		screen.update();
+
+		// 20fps hb animations
+		if (hbsAnimCounter == 3) {
+			switch (hbsDrain) {
+				case 1:
+				case 2:
+					hbsDrain += 1;
+					break;
+				case 3:
+					hbsDrain = 0;
+			}
+			switch (hbsFill) {
+				case 1:
+				case 2:
+					hbsFill += 1;
+					break;
+				case 3:
+					hbsFill = 0;
+			}
+			hbsAnimCounter = 0;
+		}else{
+			hbsAnimCounter += 1;
+		}
 
 		batch.begin();
 		if (obamaMode) {
@@ -283,6 +313,8 @@ public class SpaceShooter extends ApplicationAdapter {
 
 			scrollDist -= scrollSpeed;
 			scrollDist2 -= scrollSpeed;
+			
+
 		}
 
 		// devtools
