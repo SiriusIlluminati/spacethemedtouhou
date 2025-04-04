@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 public class shipHPIndicator {
 
     public static Sprite shipHbSpriteCalcer(TextureAtlas textatlas, int health, int drainValue, int fillValue) {
+        // best implementation fr fr
         Sprite result;
         String status;
         String changeValue = "";
