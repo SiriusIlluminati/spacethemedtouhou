@@ -40,6 +40,13 @@ public class SpaceShooter extends ApplicationAdapter {
 	int hbsFill;
 	int hbsAnimCounter;
 
+	TextureAtlas textureAtlasBlink;
+	int blinkAnimCounter;
+	int blinkAnimStage;
+	int rayDurationRemaining;
+	boolean blinkIndicatorActive;
+	boolean rayFireable;
+
 	String activeBoss;
 	boolean hitboxMode;
 	SpriteBatch batch;
@@ -109,10 +116,12 @@ public class SpaceShooter extends ApplicationAdapter {
 		mothershipEntity.width = 126;
 		directionMS = "left";
 		shotDelay = 0;
+		rayFireable = false;
 
 		hpBarGreen = new Sprite(new Texture("hpFull.png"));
 		hpBarRed = new Sprite(new Texture("hpEmpty.png"));
 		textureAtlasHBShip = new TextureAtlas("hpbship.txt");
+		textureAtlasBlink = new TextureAtlas("blink.txt");
 		score = 0;
 		font = new BitmapFont();
 		obamaMode = false;
@@ -158,7 +167,7 @@ public class SpaceShooter extends ApplicationAdapter {
 		screen.update();
 
 		// 20fps hb animations
-		if (hbsAnimCounter == 3) {
+		if (hbsAnimCounter == 2) {
 			switch (hbsDrain) {
 				case 1:
 				case 2:
@@ -181,6 +190,27 @@ public class SpaceShooter extends ApplicationAdapter {
 		}
 
 		batch.begin();
+		// 15fps blink animation
+		if (blinkIndicatorActive) {
+			if (blinkAnimCounter == 3) {
+				if (blinkAnimStage == 8) {
+					blinkAnimStage = 0;
+					blinkIndicatorActive = false;
+					rayFireable = true;
+				} else {
+					blinkAnimStage += 1;
+					blinkAnimCounter = 0;
+				}
+
+			} else {
+				blinkAnimCounter += 1;
+			}
+			batch.draw(textureAtlasBlink.createSprite("sprite_blink" + blinkAnimStage), mothershipEntity.x + 41, mothershipEntity.y - 12);
+			System.out.println("sprite_blink" + blinkAnimStage);
+		}
+
+
+
 		if (obamaMode) {
 			batch.draw(bgImg1, 0, scrollDist);
 			batch.draw(bgImg2, 0, scrollDist2);
@@ -237,6 +267,8 @@ public class SpaceShooter extends ApplicationAdapter {
 				ship.y -= 600 * Gdx.graphics.getDeltaTime() / focusMovementReduction;
 			if (Gdx.input.isKeyPressed(Input.Keys.W) & ship.y < 300)
 				ship.y += 200 * Gdx.graphics.getDeltaTime() / focusMovementReduction;
+
+
 			if (Gdx.input.isKeyPressed(Input.Keys.K)) {
 				mothershipEntity.x = MathUtils.random(10, 640 - 80);
 				activeBoss = "MS";
@@ -293,9 +325,17 @@ public class SpaceShooter extends ApplicationAdapter {
 					directionMS = "right";
 				if (mothershipEntity.x == 640 - mothershipEntity.width)
 					directionMS = "left";
-				if (Gdx.input.isKeyPressed(Input.Keys.M)) {
-					msSpeed = 0;
+				if (Gdx.input.isKeyPressed(Input.Keys.M) && rayDurationRemaining == 0) {
+					blinkIndicatorActive = true;
+				}
+				if (rayFireable){
+					rayDurationRemaining = 180;
+					rayFireable = false;
+				}
+				if (rayDurationRemaining != 0) {
 					spawnRay();
+					msSpeed = 0;
+					rayDurationRemaining -= 1;
 				} else {
 					msSpeed = 50;
 				}
