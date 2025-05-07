@@ -190,27 +190,6 @@ public class SpaceShooter extends ApplicationAdapter {
 		}
 
 		batch.begin();
-		// 15fps blink animation
-		if (blinkIndicatorActive) {
-			if (blinkAnimCounter == 3) {
-				if (blinkAnimStage == 8) {
-					blinkAnimStage = 0;
-					blinkIndicatorActive = false;
-					rayFireable = true;
-				} else {
-					blinkAnimStage += 1;
-					blinkAnimCounter = 0;
-				}
-
-			} else {
-				blinkAnimCounter += 1;
-			}
-			batch.draw(textureAtlasBlink.createSprite("sprite_blink" + blinkAnimStage), mothershipEntity.x + 41, mothershipEntity.y - 12);
-			System.out.println("sprite_blink" + blinkAnimStage);
-		}
-
-
-
 		if (obamaMode) {
 			batch.draw(bgImg1, 0, scrollDist);
 			batch.draw(bgImg2, 0, scrollDist2);
@@ -235,6 +214,23 @@ public class SpaceShooter extends ApplicationAdapter {
 				batch.draw(shipDamaged, ship.x, ship.y);
 			} else {
 				batch.draw(shipSprite, ship.x, ship.y);
+			}
+			// 15fps blink animation
+			if (blinkIndicatorActive) {
+				if (blinkAnimCounter == 3) {
+					if (blinkAnimStage == 8) {
+						blinkAnimStage = 0;
+						blinkIndicatorActive = false;
+						rayFireable = true;
+					} else {
+						blinkAnimStage += 1;
+						blinkAnimCounter = 0;
+					}
+
+				} else {
+					blinkAnimCounter += 1;
+				}
+				batch.draw(textureAtlasBlink.createSprite("sprite_blink" + blinkAnimStage), mothershipEntity.x + 51, mothershipEntity.y - 12);
 			}
 			batch.draw(mothershipImg, mothershipEntity.x, mothershipEntity.y);
 		}
