@@ -245,7 +245,7 @@ public class SpaceShooter extends ApplicationAdapter {
 				batch.draw(hbRocketFriendly, rocket.x, rocket.y);
 			}
 		}
-		font.draw(batch, "Current score: " + score, 20, 20);
+		font.draw(batch, "Score: " + score, 20, 20);
 		if (activeBoss != null) {
 			batch.draw(hpBarRed, 225, 450);
 			batch.draw(hpBarGreen, 225, 450, (200 * hpBarPercent), 20);
@@ -268,7 +268,7 @@ public class SpaceShooter extends ApplicationAdapter {
 			if (Gdx.input.isKeyPressed(Input.Keys.K)) {
 				mothershipEntity.x = MathUtils.random(10, 640 - 80);
 				activeBoss = "MS";
-				bossHP = 100;
+				bossHP = 500;
 				System.out.println("Loaded mothership");
 			}
 
@@ -308,7 +308,7 @@ public class SpaceShooter extends ApplicationAdapter {
 
 
 			if (Objects.equals(activeBoss, "MS")) {
-				maxBossHP = 100;
+				maxBossHP = 500;
 				// movement
 				if (Objects.equals(directionMS, "right") & (mothershipEntity.x <= 640 - mothershipEntity.width))
 					mothershipEntity.x += msSpeed * Gdx.graphics.getDeltaTime();
@@ -319,8 +319,10 @@ public class SpaceShooter extends ApplicationAdapter {
 					directionMS = "left";
 				else if (ship.x >= 445 & Objects.equals(directionMS, "left"))
 					directionMS = "right";
-				if (mothershipEntity.x == 640 - mothershipEntity.width)
+				if (mothershipEntity.x >= 513)
 					directionMS = "left";
+				else if (mothershipEntity.x <= 2)
+					directionMS = "right";
 				if (Gdx.input.isKeyPressed(Input.Keys.M) && rayDurationRemaining == 0) {
 					blinkIndicatorActive = true;
 				}
