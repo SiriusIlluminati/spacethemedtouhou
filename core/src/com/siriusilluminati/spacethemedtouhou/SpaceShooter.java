@@ -67,6 +67,7 @@ public class SpaceShooter extends ApplicationAdapter {
 	Texture rocketImg;
 	Rectangle ship;
 	Rectangle mothershipEntity;
+	int sideTriggerCooldownMS;
 	Array<Rectangle> rockets;
 	Array<Rectangle> rayProjectiles;
 	OrthographicCamera screen;
@@ -115,6 +116,7 @@ public class SpaceShooter extends ApplicationAdapter {
 		mothershipEntity.height = 117;
 		mothershipEntity.width = 126;
 		directionMS = "left";
+		sideTriggerCooldownMS = 0;
 		shotDelay = 0;
 		rayFireable = false;
 
@@ -309,16 +311,23 @@ public class SpaceShooter extends ApplicationAdapter {
 
 			if (Objects.equals(activeBoss, "MS")) {
 				maxBossHP = 500;
+				if (sideTriggerCooldownMS != 0)
+					sideTriggerCooldownMS -= 1;
 				// movement
 				if (Objects.equals(directionMS, "right") & (mothershipEntity.x <= 640 - mothershipEntity.width))
 					mothershipEntity.x += msSpeed * Gdx.graphics.getDeltaTime();
 				if (Objects.equals(directionMS, "left") & mothershipEntity.x >= 1)
 					mothershipEntity.x -= msSpeed * Gdx.graphics.getDeltaTime();
 				// movement ai
-				if (ship.x <= 166 & Objects.equals(directionMS, "right"))
+				if (ship.x <= 166 && Objects.equals(directionMS, "right") && sideTriggerCooldownMS == 0) {
 					directionMS = "left";
-				else if (ship.x >= 445 & Objects.equals(directionMS, "left"))
+					sideTriggerCooldownMS = 570;
+				}
+				else if (ship.x >= 445 && Objects.equals(directionMS, "left") && sideTriggerCooldownMS == 0) {
 					directionMS = "right";
+					sideTriggerCooldownMS = 570;
+
+				}
 				if (mothershipEntity.x >= 513)
 					directionMS = "left";
 				else if (mothershipEntity.x <= 2)
