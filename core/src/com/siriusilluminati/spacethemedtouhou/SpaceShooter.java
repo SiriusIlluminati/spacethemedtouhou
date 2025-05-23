@@ -46,6 +46,7 @@ public class SpaceShooter extends ApplicationAdapter {
 	int rayDurationRemaining;
 	boolean blinkIndicatorActive;
 	boolean rayFireable;
+	int rayCooldown;
 
 	String activeBoss;
 	boolean hitboxMode;
@@ -119,6 +120,7 @@ public class SpaceShooter extends ApplicationAdapter {
 		sideTriggerCooldownMS = 0;
 		shotDelay = 0;
 		rayFireable = false;
+		rayCooldown = 400;
 
 		hpBarGreen = new Sprite(new Texture("hpFull.png"));
 		hpBarRed = new Sprite(new Texture("hpEmpty.png"));
@@ -332,8 +334,9 @@ public class SpaceShooter extends ApplicationAdapter {
 					directionMS = "left";
 				else if (mothershipEntity.x <= 2)
 					directionMS = "right";
-				if (Gdx.input.isKeyPressed(Input.Keys.M) && rayDurationRemaining == 0) {
+				if (ship.x + 54 > mothershipEntity.x && ship.x < mothershipEntity.x + 126 && rayDurationRemaining == 0 && rayCooldown == 0) {
 					blinkIndicatorActive = true;
+					rayCooldown = 500;
 				}
 				if (rayFireable){
 					rayDurationRemaining = 180;
@@ -346,6 +349,8 @@ public class SpaceShooter extends ApplicationAdapter {
 				} else {
 					msSpeed = 50;
 				}
+				if (rayCooldown != 0)
+					rayCooldown -= 1;
 			}
 
 			if (shotDelay > 0)
